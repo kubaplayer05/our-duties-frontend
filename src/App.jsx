@@ -1,12 +1,16 @@
-import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import {createBrowserRouter, RouterProvider, Navigate} from "react-router-dom";
 import Login from "./pages/Login.jsx";
+import Signup from "./pages/Signup.jsx";
+import {useAuth} from "./hooks/useAuth.jsx";
 
 const App = () => {
+
+    const {user} = useAuth()
 
     const router = createBrowserRouter([
         {
             path: "/",
-            element: <h1 className="text-lg">Witaj</h1>,
+            element: user ? <h1 className="text-lg">Witaj</h1> : <Navigate to="/login"/>,
         },
         {
             path: "/login",
@@ -14,7 +18,7 @@ const App = () => {
         },
         {
             path: "/signup",
-            element: <h1>Rejestrowanie</h1>,
+            element: <Signup/>,
         }
     ])
 
