@@ -5,20 +5,20 @@ import {useAuth} from "./hooks/useAuth.jsx";
 
 const App = () => {
 
-    const {user} = useAuth()
+    const {state} = useAuth()
 
     const router = createBrowserRouter([
         {
             path: "/",
-            element: user ? <h1 className="text-lg">Witaj</h1> : <Navigate to="/login"/>,
+            element: state.user ? <h1 className="text-lg">Witaj</h1> : <Navigate to="/login"/>,
         },
         {
             path: "/login",
-            element: <Login/>,
+            element: !state.user ? <Login/> : <Navigate to="/"/>,
         },
         {
             path: "/signup",
-            element: <Signup/>,
+            element: !state.user ? <Signup/> : <Navigate to="/"/>,
         }
     ])
 

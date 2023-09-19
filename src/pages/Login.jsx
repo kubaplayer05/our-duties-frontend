@@ -1,11 +1,16 @@
 import Button from "../components/ui/Button.jsx";
 import Input from "../components/ui/Input.jsx";
-import {Link} from "react-router-dom";
-import {useState} from "react";
+import {Link, useNavigate,} from "react-router-dom";
 import {useInput} from "../hooks/useInput.jsx";
 import {validateEmail, validatePassword} from "../utils/verify.jsx";
+import {useFetch} from "../hooks/useFetch.jsx";
+import {useAuth} from "../hooks/useAuth.jsx";
 
 const Login = () => {
+
+    const navigate = useNavigate()
+    const {dispatch} = useAuth()
+    const {fetchData, isLoading, error} = useFetch()
 
     const {
         value: email,
@@ -23,13 +28,30 @@ const Login = () => {
         setTouched: setPasswordTouched
     } = useInput(validatePassword)
 
-    const submitHandler = e => {
+    const submitHandler = async e => {
         e.preventDefault()
 
         setEmail("")
         setPassword("")
+        setEmailTouched(false)
+        setPasswordTouched(false)
 
-        console.log(`email: ${email} \npassword: ${password}`)
+        const userData = await fetchData("/user/login", {
+            method: "POST",
+            credentials: 'include',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                email,
+                password
+            })
+        })
+
+        if (userData && !userData.error) {
+            dispatch({type: "LOGIN", payload: userData})
+            navigate("/")
+        }
     }
 
     return (
@@ -63,7 +85,10 @@ const Login = () => {
                     {passwordError && passwordTouched && <p className="text-red-600">{passwordError}</p>}
                 </div>
             </div>
-            <Button type="submit" className="w-[100%]">Akceptuj</Button>
+            {error && <div className="p-2 border-2-red-500 bg-red-200 rounded-md">
+                <p className="text-red-600 font-bold">{error}</p>
+            </div>}
+            <Button type="submit" className="w-[100%]" disabled={isLoading}>{isLoading ? "..." : "Akceptuj"}</Button>
             <p className="text-base font-semibold">Nie masz konta? <Link to="/signup" className="text-blue-600">Zarejestruj
                 się</Link></p>
         </form>
