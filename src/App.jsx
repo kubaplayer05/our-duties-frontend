@@ -2,6 +2,9 @@ import {createBrowserRouter, RouterProvider, Navigate} from "react-router-dom";
 import Login from "./pages/Login.jsx";
 import Signup from "./pages/Signup.jsx";
 import {useAuth} from "./hooks/useAuth.jsx";
+import Layout from "./layout/Layout.jsx";
+import MainDashboard from "./pages/MainDashboard.jsx";
+import GroupsList from "./components/GroupsList.jsx";
 
 const App = () => {
 
@@ -10,7 +13,13 @@ const App = () => {
     const router = createBrowserRouter([
         {
             path: "/",
-            element: state.user ? <h1 className="text-lg">Witaj</h1> : <Navigate to="/login"/>,
+            element: state.user ? <Layout/> : <Navigate to="/login"/>,
+            children: [
+                {
+                    path: "/",
+                    element: <MainDashboard/>
+                }
+            ]
         },
         {
             path: "/login",
