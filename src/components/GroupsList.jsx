@@ -12,17 +12,6 @@ const GroupsList = () => {
     }
 
     useEffect(() => {
-        /*
-        fetchData("/groups", {
-            credentials: 'include',
-            headers: {
-                "Content-Type": "application/json",
-            },
-        }).then(data => {
-            console.log(data)
-        })
-
-         */
 
         const getGroups = async () => {
 
@@ -42,7 +31,7 @@ const GroupsList = () => {
     }, []);
 
     return (
-        <div className="px-4 py-6 max-w-[400px] border-r-2 border-r-gray-200 h-full">
+        <div className="px-4 py-6 max-w-[400px] min-w-[300px] w-[20%] border-r-2 border-r-gray-200 h-full">
             <div className="flex justify-between items-center">
                 <p>Twoje grupy</p>
                 <Button onClick={createGroup}>Dodaj +</Button>
