@@ -1,14 +1,23 @@
 import {useFetch} from "../hooks/useFetch.jsx";
 import Button from "./ui/Button.jsx";
+import Modal from "./ui/Modal.jsx";
 import {useState, useEffect} from "react";
+import {createPortal} from "react-dom";
+import Backdrop from "./ui/Backdrop.jsx";
+import CreateGroupModal from "./CreateGroupModal.jsx";
 
 const GroupsList = () => {
 
     const [groups, setGroups] = useState([])
+    const [showModal, setShowModal] = useState(false)
     const {isLoading, error, fetchData} = useFetch()
 
     const createGroup = () => {
+        setShowModal(true)
+    }
 
+    const closeModal = () => {
+        setShowModal(false)
     }
 
     useEffect(() => {
@@ -23,6 +32,7 @@ const GroupsList = () => {
             })
 
             if (groups && !groups.error) {
+                console.log(groups)
                 setGroups([...groups])
             }
         }
@@ -45,6 +55,9 @@ const GroupsList = () => {
                     })}
                 </ul>
             </div>
+            {showModal && createPortal(<CreateGroupModal
+                closeModal={closeModal}/>, document.querySelector("#modal-root"))}
+            {showModal && createPortal(<Backdrop/>, document.querySelector("#modal-root"))}
         </div>
     )
 }

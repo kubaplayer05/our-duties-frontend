@@ -46,7 +46,7 @@ const TaskList = () => {
             <ul className="flex flex-col items-center gap-6">
                 {tasks.length === 0 && <p className="text-base font-semibold">Brak Zadań</p>}
                 {tasks.map(task => {
-                    return <li key={task.id} className="max-w-[1000px] w-[80%] bg-white px-6 py-5 shadow-md relative">
+                    return <li key={task.id} className="max-w-[1000px] w-[80%] bg-white px-6 py-5 shadow relative">
                         <h3 className="text-lg font-medium uppercase">{task.name}</h3>
                         <TaskPriority priority={task.priority}/>
                         <span className="absolute top-4 right-4 text-gray-500">utworzono: {task.createdAt}</span>
