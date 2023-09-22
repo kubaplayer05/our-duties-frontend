@@ -1,14 +1,14 @@
 import {useFetch} from "../hooks/useFetch.jsx";
 import Button from "./ui/Button.jsx";
-import Modal from "./ui/Modal.jsx";
 import {useState, useEffect} from "react";
 import {createPortal} from "react-dom";
 import Backdrop from "./ui/Backdrop.jsx";
 import CreateGroupModal from "./CreateGroupModal.jsx";
+import {useGroups} from "../hooks/useGroups.jsx";
 
 const GroupsList = () => {
 
-    const [groups, setGroups] = useState([])
+    const {state, dispatch} = useGroups()
     const [showModal, setShowModal] = useState(false)
     const {isLoading, error, fetchData} = useFetch()
 
@@ -33,7 +33,7 @@ const GroupsList = () => {
 
             if (groups && !groups.error) {
                 console.log(groups)
-                setGroups([...groups])
+                dispatch({type: "ADD_GROUPS", payload: [...groups]})
             }
         }
 
@@ -50,7 +50,7 @@ const GroupsList = () => {
                 {isLoading && <span>Ładowanie</span>}
                 {error && <span className="text-red-600">{error}</span>}
                 <ul>
-                    {groups.map((group) => {
+                    {state.groups.map((group) => {
                         return <li key={group.id}>{group.name}</li>
                     })}
                 </ul>

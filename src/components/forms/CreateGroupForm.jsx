@@ -2,9 +2,11 @@ import Input from "../ui/Input.jsx";
 import Button from "../ui/Button.jsx";
 import {useFetch} from "../../hooks/useFetch.jsx";
 import {useInput} from "../../hooks/useInput.jsx";
+import {useGroups} from "../../hooks/useGroups.jsx";
 
 const CreateGroupForm = () => {
 
+    const {dispatch} = useGroups()
     const {value: name, setValue: setName} = useInput()
     const {value: password, setValue: setPassword} = useInput()
     const {isLoading, error, fetchData} = useFetch()
@@ -12,7 +14,7 @@ const CreateGroupForm = () => {
     const submitHandler = async e => {
         e.preventDefault()
 
-        const response = await fetchData("/groups/create", {
+        const {group} = await fetchData("/groups/create", {
             method: "POST",
             credentials: 'include',
             headers: {
@@ -24,7 +26,24 @@ const CreateGroupForm = () => {
             })
         })
 
-        console.log(response)
+        if (group && !group.error) {
+            dispatch({type: "ADD_GROUP", payload: group})
+        }
+
+        /*
+        const deleteGroups = await fetchData("/groups/delete", {
+            method: "DELETE",
+            credentials: 'include',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                id: "aa8d57f6-91bf-4e5a-9e5a-88b84a2a3f53"
+            })
+        })
+
+        console.log(deleteGroups)
+         */
     }
 
     return (
